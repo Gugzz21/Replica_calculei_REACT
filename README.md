@@ -1,74 +1,58 @@
-# React + TypeScript + Vite
+# Status do Projeto: Calculei (React Clone)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este documento descreve o que já foi implementado e o que ainda falta para que a interface da aplicação "Calculei" fique idêntica ao modelo de referência (mockup) apresentado.
 
-Currently, two official plugins are available:
+## ✅ O que já foi feito
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+*   **Estrutura Inicial do Projeto:** Configuração básica com React e TailwindCSS (via Vite/CRA).vos dos componentes criados i
+*   **Componentes Base:** Arquisoladamente (`Header`, `Form`, `Data`, `Juros`, `Calcular`).
+*   **Cabeçalho (Header):**
+    *   Inclusão da logo do "Calculei".
+    *   Link de "Orientações" com o respectivo ícone na direita.
+*   **Aviso Superior:** O texto abaixo do cabeçalho já está presente na tela ("Todos os valores estão em Reais (R$)...").
+*   **Renderização Principal:** O arquivo `App.tsx` já incorpora e chama os componentes (ainda que dispostos de forma vertical simples).
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ❌ O que falta fazer (Para ficar visualmente completo)
 
-## Expanding the ESLint configuration
+Abaixo estão listadas as pendências para que a UI fique como no mockup.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1. Layout Base (Grid) e Estilização
+*   O layout atual empilha tudo em uma coluna simples (`flex-col`). Ele precisa ser modificado para dividir a tela em duas colunas na parte de cima:
+    *   **Esquerda:** Formulário Principal.
+    *   **Direita:** Card de Histórico de Cálculos e textos explicativos.
+*   Ajustar margens laterais, fontes padrão e cores secundárias para bater com a identidade visual da imagem.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 2. Formulário Principal
+Os inputs e componentes básicos existem, mas estão incorretos e sem estilização. É preciso criar:
+*   `Select`: **Tipo de cálculo** (ex: "Créditos / Débitos Entre Particulares").
+*   `Select`: **Índice de correção monetária** (ex: "TJ/RJ LEI 6.899/81").
+*   `Input`: **Valor** (formatado como moeda, com prefixo `R$`).
+*   `Input/Datepicker`: **Data inicial** e **Data do cálculo** alinhadas na mesma linha.
+*   `Select`: **Descrição** (ex: "Ressarcimento").
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 3. Coluna da Direita (Contexto Histórico)
+*   **Tabela de Histórico de Cálculos:** Precisa ser desenhada uma pequena tabela com as colunas `#`, `Data Inicial`, `Valor principal`, e `Total devido`.
+*   **Caixa e Textos:** O card branco ao redor dessa tabela.
+*   **Parágrafos Informativos:** Adicionar o texto explicativo sobre Lançamentos de Crédito e o direcionamento para a DIRETRIZ TÉCNICA MPRJ (com estilo de link azul).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 4. Toggle "Juros"
+*   O componente atual `Juros` possui um campo numérico simples. Ele deve ser atualizado para exibir apenas o label **"Juros"** e um **botão Toggle do tipo on/off** (switch arredondado) ativo ou inativo.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 5. Botões de Ação
+*   O componente atual tem apenas um pequeno botão azul.
+*   É necessário criar 2 botões grandes ocupando toda a largura do formulário, dispostos lado a lado:
+    *   **CALCULAR**: Fundo cinza claro (estilo botão desativado/secundário).
+    *   **LIMPAR**: Fundo branco, com borda azul.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 6. Seção Central - Tabela "Lançamentos"
+Totalmente ausente. É necessário criar:
+*   Título **"Lançamentos"** com hierarquia visual clara.
+*   A tabela de lançamentos com fundo azulado contendo as seguintes colunas de cabeçalho: `#`, `Data Inicial`, `Valor principal`, `Data do cálculo`, `Índice de correção monetária`, `Valor atualizado`, `Dias`, `Juros` e `Total devido`.
+*   A linha padrão (default row) da tabela preenchida com zerados (`R$ 0,00`).
+*   O texto informativo da tabela com borda inferior: *"Calcule o primeiro lançamento."*
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# Replica_calculei_REACT
+### 7. Rodapé (Footer)
+*   Ausente no projeto atual.
+*   Incluir logo e título **GATE MPRJ - GRUPO DE APOIO TÉCNICO ESPECIALIZADO**, centralizado no fundo da página.
